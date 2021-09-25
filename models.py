@@ -1,4 +1,3 @@
-from sqlalchemy import Column, String, Integer, Date, SMALLINT, Enum
 from flask_sqlalchemy import SQLAlchemy
 from config import SQLALCHEMY_DATABASE_URI
 
@@ -7,7 +6,7 @@ db = SQLAlchemy()
 
 # genders enum
 genders = ('M', 'F')
-gender_enum = Enum(*genders, name='gender')
+gender_enum = db.Enum(*genders, name='gender')
 
 '''
 setup_db(app)
@@ -21,7 +20,19 @@ def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI):
         app.config['SQLALCHEMY_DATABASE_URI'] = db_path
     db.app = app
     db.init_app(app)
-    db.create_all()
+    # calling flask db migrate would create all tables
+    # db.create_all()
+
+
+'''
+Many to Many relationship association
+'''
+
+assignments = db.Table(
+    'assignments',
+    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True),
+    db.Column('actor_id', db.Integer, db.ForeignKey('actors.id'), primary_key=True)
+)
 
 
 '''
@@ -39,9 +50,14 @@ class Movie(db.Model):
     '''
     __tablename__ = 'movies'
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_date = Column(Date)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    release_date = db.Column(db.Date)
+    actors = db.relationship(
+        'Actor',
+        secondary=assignments,
+        backref=db.backref('movies', lazy=True)
+    )
 
     def __init__(self, title, release_date):
         self.title = title
@@ -62,9 +78,19 @@ class Movie(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date
+            'release_date': self.release_date,
+            'actors' : [actor.short() for actor in self.actors]
         }
-        
+
+    def short(self):
+        '''
+        returns a short format of the movie
+        used for formatting movies when showing actor data
+        '''
+        return {
+            'id': self.id,
+            'title' : self.title
+        }
 
 
 '''
@@ -76,11 +102,11 @@ Actor
 class Actor(db.Model):
     __tablename__ = 'actors'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     # using age without months here
-    age = Column(SMALLINT)
-    gender = Column(gender_enum)
+    age = db.Column(db.SMALLINT)
+    gender = db.Column(gender_enum)
 
     def __init__(self, name, age, gender):
         self.name = name
@@ -102,6 +128,13 @@ class Actor(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'age' : self.age,
-            'gender' : self.gender
+            'age': self.age,
+            'gender': self.gender,
+            'movies': [movie.short() for movie in self.movies]
+        }
+
+    def short(self):
+        return {
+            'id' : self.id,
+            'name' : self.name
         }
