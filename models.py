@@ -20,13 +20,15 @@ def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI):
         app.config['SQLALCHEMY_DATABASE_URI'] = db_path
     db.app = app
     db.init_app(app)
-    # calling flask db migrate would create all tables
+    # calling flask db upgrade would create all tables
     # db.create_all()
 
 
 '''
 Many to Many relationship association
 '''
+
+
 
 assignments = db.Table(
     'assignments',
