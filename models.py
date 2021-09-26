@@ -76,6 +76,14 @@ class Movie(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def assign(self, actors):
+        '''
+        assigns an actor to play a role in this movie
+        '''
+        self.actors.extend(actors)
+        db.session.commit()
+        
+
     def format(self):
         return {
             'id': self.id,
