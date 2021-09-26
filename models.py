@@ -53,7 +53,7 @@ class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String, nullable = False, unique = True)
     release_date = db.Column(db.Date)
     actors = db.relationship(
         'Actor',
