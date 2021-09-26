@@ -15,9 +15,12 @@ app.logger.setLevel(logging.INFO)
 setup_db(app)
 # allow migration management using flask_migrate
 migrate = Migrate(app, db)
+
+
 '''
 Movies end points
 '''
+
 
 @app.route('/movies', methods=['GET'])
 def get_movies():
@@ -50,7 +53,7 @@ def add_movie():
         return jsonify(
             {
                 'success': True,
-                'status': 201,
+                'status': 200,
                 'created': movie.format(),
                 'created_at': datetime.now()
             }
@@ -59,7 +62,203 @@ def add_movie():
         abort(422)
 
 
+@app.route('/movies/<int:movie_id>', methods=['PATCH'])
+def edit_movie(movie_id):
+    '''
+    edits an existing movie
+    '''
+    data = request.json
+    movie = Movie.query.get_or_404(movie_id)
+    try:
+        if 'title' in data:
+            movie.title = data['title']
+        if 'release_date' in data:
+            movie.release_date = data['release_date']
+        movie.update()
+        return jsonify(
+            {
+                'success': True,
+                'status': 200,
+                'movie': movie.format(),
+                'modified_at': datetime.now()
+            }
+        )
+    except:
+        abort(422)
 
+
+@app.route('/movies/<int:movie_id>', methods=['DELETE'])
+def delete_movie(movie_id):
+    '''
+    deletes an existing movie movie
+    '''
+    movie = Movie.query.get_or_404(movie_id)
+    try:
+        movie.delete()
+        return jsonify(
+            {
+                'success': True,
+                'status': 200,
+                'deleted_id': movie_id,
+                'deleted_at': datetime.now()
+            }
+        )
+    except:
+        abort(422)
+
+
+'''
+Actors end points
+'''
+
+
+@app.route('/actors', methods=['GET'])
+def get_actors():
+    '''
+    returns all actors
+    accessible by anyone
+    '''
+    actors = Actor.query.all()
+    res = {
+        actor.id: actor.format() for actor in actors
+    }
+    return jsonify(
+        {
+            'success': True,
+            'status': 200,
+            'actors': res
+        }
+    )
+
+
+@app.route('/actors', methods=['POST'])
+def add_actor():
+    '''
+    posts new Actor
+    '''
+    data = request.json
+    try:
+        actor = Actor(**data)
+        actor.insert()
+        return jsonify(
+            {
+                'success': True,
+                'status': 200,
+                'created': actor.format(),
+                'created_at': datetime.now()
+            }
+        )
+    except:
+        abort(422)
+
+
+@app.route('/actors/<int:actor_id>', methods=['PATCH'])
+def edit_actor(actor_id):
+    '''
+    edits an existing actor
+    '''
+    data = request.json
+    actor = Actor.query.get_or_404(actor_id)
+    try:
+        if 'name' in data:
+            actor.name = data['name']
+        if 'age' in data:
+            actor.age = (int)(data['age'])
+        if 'gender' in data:
+            actor.gender = data['gender']
+        actor.update()
+        return jsonify(
+            {
+                'success': True,
+                'status': 200,
+                'actor': actor.format(),
+                'modified_at': datetime.now()
+            }
+        )
+    except:
+        abort(422)
+
+
+@app.route('/actors/<int:actor_id>', methods=['DELETE'])
+def delete_actor(actor_id):
+    '''
+    deletes an existing actor
+    '''
+    actor = Actor.query.get_or_404(actor_id)
+    try:
+        actor.delete()
+        return jsonify(
+            {
+                'success': True,
+                'status': 200,
+                'deleted_id': actor_id,
+                'modified_at': datetime.now()
+            }
+        )
+    except:
+        abort(422)
+
+
+'''
+Error Handlers
+'''
+
+
+# server Error
+@app.errorhandler(500)
+def server_error(error):
+    return jsonify({
+        "success": False,
+        "error": 500,
+        "message": "internal server error"
+    }), 500
+
+# unprocessible entity
+
+
+@app.errorhandler(422)
+def server_error(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessible entity"
+    }), 422
+
+
+'''
+Authentication and Authorization errors
+'''
+
+'''
+@app.errorhandler(AuthError)
+def authentication_error(error):
+    return jsonify({
+        "success": False,
+        "error": error.status_code,
+        "message": error.message
+    }), error.status_code
+'''
+
+
+# Not Found
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+# Bad Request
+
+
+@app.errorhandler(400)
+def server_error(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "bad request"
+    }), 400
 
 
 if __name__ == '__main__':
