@@ -4,6 +4,7 @@ from flask import Flask, request, abort
 from flask.json import jsonify
 from flask_migrate import Migrate
 from models import setup_db, db, Actor, Movie
+from auth import AuthError, requires_auth
 
 
 # define our app
@@ -21,8 +22,9 @@ migrate = Migrate(app, db)
 Movies end points
 '''
 
-
+@requires_auth('view:movies')
 @app.route('/movies', methods=['GET'])
+@requires_auth('view:movies')
 def get_movies():
     '''
     returns all movies
@@ -42,6 +44,7 @@ def get_movies():
 
 
 @app.route('/movies', methods=['POST'])
+@requires_auth('add:movies')
 def add_movie():
     '''
     posts new movie
@@ -63,6 +66,7 @@ def add_movie():
 
 
 @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+@requires_auth('patch:movies')
 def edit_movie(movie_id):
     '''
     edits an existing movie
@@ -88,6 +92,7 @@ def edit_movie(movie_id):
 
 
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+@requires_auth('delete:movies')
 def delete_movie(movie_id):
     '''
     deletes an existing movie movie
@@ -111,8 +116,8 @@ def delete_movie(movie_id):
 Actors end points
 '''
 
-
 @app.route('/actors', methods=['GET'])
+@requires_auth('view:actors')
 def get_actors():
     '''
     returns all actors
@@ -132,6 +137,7 @@ def get_actors():
 
 
 @app.route('/actors', methods=['POST'])
+@requires_auth('add:actors')
 def add_actor():
     '''
     posts new Actor
@@ -153,6 +159,7 @@ def add_actor():
 
 
 @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+@requires_auth('patch:actors')
 def edit_actor(actor_id):
     '''
     edits an existing actor
@@ -180,6 +187,7 @@ def edit_actor(actor_id):
 
 
 @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+@requires_auth('delete:actors')
 def delete_actor(actor_id):
     '''
     deletes an existing actor
@@ -229,7 +237,7 @@ def server_error(error):
 Authentication and Authorization errors
 '''
 
-'''
+
 @app.errorhandler(AuthError)
 def authentication_error(error):
     return jsonify({
@@ -237,7 +245,7 @@ def authentication_error(error):
         "error": error.status_code,
         "message": error.message
     }), error.status_code
-'''
+
 
 
 # Not Found
@@ -250,8 +258,6 @@ def not_found(error):
     }), 404
 
 # Bad Request
-
-
 @app.errorhandler(400)
 def server_error(error):
     return jsonify({
