@@ -12,10 +12,10 @@ app = Flask(__name__)
 # config the app
 app.config.from_object('config')
 app.logger.setLevel(logging.INFO)
-# config database
-setup_db(app)
 # allow migration management using flask_migrate
 migrate = Migrate(app, db)
+# config database
+setup_db(app)
 
 
 '''
@@ -25,7 +25,7 @@ Movies end points
 @requires_auth('view:movies')
 @app.route('/movies', methods=['GET'])
 @requires_auth('view:movies')
-def get_movies():
+def get_movies(current_user):
     '''
     returns all movies
     accessible by anyone
@@ -45,7 +45,7 @@ def get_movies():
 
 @app.route('/movies', methods=['POST'])
 @requires_auth('add:movies')
-def add_movie():
+def add_movie(current_user):
     '''
     posts new movie
     '''
@@ -67,7 +67,7 @@ def add_movie():
 
 @app.route('/movies/<int:movie_id>', methods=['PATCH'])
 @requires_auth('patch:movies')
-def edit_movie(movie_id):
+def edit_movie(current_user, movie_id):
     '''
     edits an existing movie
     '''
@@ -93,7 +93,7 @@ def edit_movie(movie_id):
 
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
 @requires_auth('delete:movies')
-def delete_movie(movie_id):
+def delete_movie(current_user, movie_id):
     '''
     deletes an existing movie movie
     '''
@@ -118,7 +118,7 @@ Actors end points
 
 @app.route('/actors', methods=['GET'])
 @requires_auth('view:actors')
-def get_actors():
+def get_actors(current_user):
     '''
     returns all actors
     accessible by anyone
@@ -138,7 +138,7 @@ def get_actors():
 
 @app.route('/actors', methods=['POST'])
 @requires_auth('add:actors')
-def add_actor():
+def add_actor(current_user):
     '''
     posts new Actor
     '''
@@ -160,7 +160,7 @@ def add_actor():
 
 @app.route('/actors/<int:actor_id>', methods=['PATCH'])
 @requires_auth('patch:actors')
-def edit_actor(actor_id):
+def edit_actor(current_user, actor_id):
     '''
     edits an existing actor
     '''
@@ -188,7 +188,7 @@ def edit_actor(actor_id):
 
 @app.route('/actors/<int:actor_id>', methods=['DELETE'])
 @requires_auth('delete:actors')
-def delete_actor(actor_id):
+def delete_actor(current_user, actor_id):
     '''
     deletes an existing actor
     '''

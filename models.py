@@ -14,14 +14,13 @@ setup_db(app)
 '''
 
 
-def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI):
+def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     if db_path != SQLALCHEMY_DATABASE_URI:
         app.config['SQLALCHEMY_DATABASE_URI'] = db_path
-    db.app = app
-    db.init_app(app)
-    # calling flask db upgrade would create all tables
-    # db.create_all()
+    database.app = app
+    database.init_app(app)
+    database.create_all()
 
 
 '''
@@ -113,7 +112,7 @@ class Actor(db.Model):
     __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False, unique=True)
     # using age without months here
     age = db.Column(db.SMALLINT)
     gender = db.Column(gender_enum)
