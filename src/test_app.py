@@ -2,9 +2,8 @@ from datetime import datetime
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from app import app
-from models import Actor, Movie
-from populate_database import insert_all, init_database
+from api import app
+from models import Actor, Movie, setup_db
 
 # get tokens
 f = open('tokens.json', 'r')
@@ -21,7 +20,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.app = app
         self.app.config["DEBUG"] = False
         self.client = self.app.test_client
-        init_database({'app' :self.app, 'db_path' :self.database_path})
+        setup_db(self.app, self.database_path)
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()

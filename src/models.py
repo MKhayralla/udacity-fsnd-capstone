@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from config import SQLALCHEMY_DATABASE_URI
+from config import basedir
+# database url
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@localhost:5432/casting'
 
 # ORM instance
 db = SQLAlchemy()

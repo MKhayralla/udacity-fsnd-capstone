@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import app
+from api import app
 from models import setup_db, Movie, Actor
 
 
