@@ -27,7 +27,7 @@ def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db, test=False):
     app.config['SQLALCHEMY_DATABASE_URI'] = db_path if (test == False) else SQLALCHEMY_DATABASE_URI_TEST
     database.app = app
     database.init_app(app)
-    database.create_all()
+    # database.create_all()
 
 
 '''
