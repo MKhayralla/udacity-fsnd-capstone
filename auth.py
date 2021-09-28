@@ -52,7 +52,7 @@ def get_token_auth_header():
 def check_permissions(permission, payload: dict):
     '''
     @INPUTS
-        permission: string permission (i.e. 'post:drink')
+        permission: string permission (i.e. 'patch:actors')
         payload: decoded jwt payload
 
     raises an AuthError if permissions are not included in the payload

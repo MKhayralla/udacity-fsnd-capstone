@@ -1,3 +1,4 @@
+# import modules
 from datetime import datetime
 from pprint import pprint
 import logging
@@ -34,7 +35,9 @@ def get_movies(current_user):
     returns all movies
     accessible by anyone
     '''
+    # get all movies
     movies = Movie.query.all()
+    # format output into an object
     res = {
         movie.id: movie.format() for movie in movies
     }
@@ -55,8 +58,11 @@ def add_movie(current_user):
     '''
     data = request.json
     try:
+        # read date from input
         data['release_date'] = datetime.strptime(data['release_date'], '%m %d %Y')
+        # instantiate a movie from inputs
         movie = Movie(**data)
+        # insert it into the database
         movie.insert()
         return jsonify(
             {
@@ -67,7 +73,6 @@ def add_movie(current_user):
             }
         )
     except Exception as e:
-        pprint(e)
         abort(422)
 
 
@@ -78,7 +83,9 @@ def edit_movie(current_user, movie_id):
     edits an existing movie
     '''
     data = request.json
+    # find the required movie oe return 404
     movie = Movie.query.get_or_404(movie_id)
+    # edit the data
     try:
         if 'title' in data:
             movie.title = data['title']
@@ -87,6 +94,7 @@ def edit_movie(current_user, movie_id):
                 data['release_date'],
                 '%m %d %Y'
             )
+        # save changes
         movie.update()
         return jsonify(
             {
@@ -97,7 +105,6 @@ def edit_movie(current_user, movie_id):
             }
         )
     except Exception as e:
-        pprint(e)
         abort(422)
 
 
@@ -107,8 +114,10 @@ def delete_movie(current_user, movie_id):
     '''
     deletes an existing movie movie
     '''
+    # get the required movie or 404 
     movie = Movie.query.get_or_404(movie_id)
     try:
+        # delete the movie from the database
         movie.delete()
         return jsonify(
             {
@@ -133,7 +142,9 @@ def get_actors(current_user):
     returns all actors
     accessible by anyone
     '''
+    # get all actors
     actors = Actor.query.all()
+    # format output
     res = {
         actor.id: actor.format() for actor in actors
     }
@@ -154,7 +165,9 @@ def add_actor(current_user):
     '''
     data = request.json
     try:
+        # instantiate an actor
         actor = Actor(**data)
+        # add it to the database
         actor.insert()
         return jsonify(
             {
@@ -175,7 +188,9 @@ def edit_actor(current_user, actor_id):
     edits an existing actor
     '''
     data = request.json
+    # find the required actor or 404
     actor = Actor.query.get_or_404(actor_id)
+    # try editing data
     try:
         if 'name' in data:
             actor.name = data['name']
@@ -202,8 +217,10 @@ def delete_actor(current_user, actor_id):
     '''
     deletes an existing actor
     '''
+    # find the required actor or 404
     actor = Actor.query.get_or_404(actor_id)
     try:
+        # delete it from the database
         actor.delete()
         return jsonify(
             {
