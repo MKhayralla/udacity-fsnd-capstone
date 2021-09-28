@@ -405,6 +405,8 @@ git push heroku master
 
 This will build and run the app using `Procfile` data
 
+>> The app is hosted at `https://casting-agency-capstone-303.herokuapp.com/`
+
 ## Authors
 - Mahmoud Khayralla (Me)
 
