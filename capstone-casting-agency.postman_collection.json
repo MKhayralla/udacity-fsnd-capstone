@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "88a635ce-9095-4f3e-9fdd-5821541f231a",
+		"name": "capstone-casting-agency",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "assistant",
+			"item": [
+				{
+					"name": "get-actors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status_code_equals_200', () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/actors",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-actor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('not_authorized', () => {",
+									"    pm.response.to.have.status(403)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"actor name\",\n    \"age\" : 25,\n    \"gender\" : \"M\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-url}}/actors",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"actors"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFHX3RZRDcyaEJvUE85T1JaRDJqRyJ9.eyJpc3MiOiJodHRwczovL2Rldi12eTk5LXZucS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjE1MDU3Mzk3MmVmYTgwMDY5YzY1YzdkIiwiYXVkIjoiaHR0cHM6Ly9jYXN0aW5nLnVkYWNpdHkuY2Fwc3RvbmUiLCJpYXQiOjE2MzI4MTg2NjksImV4cCI6MTYzMjkwNTA2OSwiYXpwIjoibXM0VU16c1h1ZDZEYzZRYzFpaG1SaE5Td2JPc1k5UTUiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbInZpZXc6YWN0b3JzIiwidmlldzptb3ZpZXMiXX0.vkSzK46YYgFljvW9CN776ZJFfxogESVwTEJ-8umf_A2FKj95CRtbf5uEMW3obiE5pxtdY4jhXxsz6i6WYvp1ZYy9yUzkJIvSGbm0kh1wQZbnarO2dRNQYlaCa407_USxP0QNfi1KCKW0WZFSuEHVPDEycT6ikq1-xr7B3PqMuVqvPpGuNiqxtcDwEIMrwugBEQK1h1dgtSqaHZoN8vw4M-WwVEj0lYTY4JOpBoaF0sGwFcexiBu__7AN2MmNg5BMbQpzeruK6wWZY7Cvk8D6da5oyiIzaNh3QAc1PRBepUNZdilaIW_jiQnS7nmrkzjw_RPhRGWJ18HaVHt_AfD5RA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "director",
+			"item": [
+				{
+					"name": "post-actor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('created', () => {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"Mohamed Wagdy\",\n    \"age\" : 27,\n    \"gender\" : \"M\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-url}}/actors",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-actor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('deleted', () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('right data', () => {",
+									"    pm.expect(pm.response.json().deleted_id).to.be.equals(7)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/actors/7",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"actors",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('not_authorized', () => {",
+									"    pm.response.to.have.status(403)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"test movie\",\n    \"release_date\" : \"12 25 2024\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-url}}/movies",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFHX3RZRDcyaEJvUE85T1JaRDJqRyJ9.eyJpc3MiOiJodHRwczovL2Rldi12eTk5LXZucS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjE1MDU4NzZjYWMzN2YwMDY4NDIxMDI3IiwiYXVkIjoiaHR0cHM6Ly9jYXN0aW5nLnVkYWNpdHkuY2Fwc3RvbmUiLCJpYXQiOjE2MzI4MTg3MTgsImV4cCI6MTYzMjkwNTExOCwiYXpwIjoibXM0VU16c1h1ZDZEYzZRYzFpaG1SaE5Td2JPc1k5UTUiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImFkZDphY3RvcnMiLCJkZWxldGU6YWN0b3JzIiwicGF0Y2g6YWN0b3JzIiwicGF0Y2g6bW92aWVzIiwidmlldzphY3RvcnMiLCJ2aWV3Om1vdmllcyJdfQ.WpQwxwmI7H6fYhFkGWK5bgnlD7kqs03kdw5GHqvifrplZMG7TBjApxhmeQbcgdYZqYNkpdsaUUNh9n9CnNfQGv2Hyl2dUUzufGc71-_UFRtLL-KJkv6BFdIUpfSlsKFe4eheuCHh0klca8lsl-hPZxdoGzbCAtsFvtPDMIfJPyWQgFFg5ibJ-8dvW66GZ5lfIwHF2Xsgh12A-5YNthfmAK23eCV5xIi2xUv2EoWE9wQ4t_mGj9JWMo_lUjgRcdc8bKCnHcNeoidekNkq6JI6ikk5XUWjzIWBvcVBAzM1kndtBG6mQfR01q5TBZXG0tV-gEIth-d4A4WbxN6ttmHiwg",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "producer",
+			"item": [
+				{
+					"name": "post-movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('created', () => {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Face Off\",\n    \"release_date\" : \"06 24 1999\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-url}}/movies",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('deleted', () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('deleted the right entity', () => {",
+									"    pm.expect(pm.response.json().deleted_id).to.be.equal(3)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/movies/3",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"movies",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "movie_not_found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('not found', ()=>{",
+									"    pm.response.to.have.status(404)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/movies/3",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"movies",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('method not allowed', () => {",
+									"    pm.response.to.have.status(405)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/actors/7",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"actors",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFHX3RZRDcyaEJvUE85T1JaRDJqRyJ9.eyJpc3MiOiJodHRwczovL2Rldi12eTk5LXZucS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjE1MDU4ZjMwNjcyMWUwMDY5MDY1M2FjIiwiYXVkIjoiaHR0cHM6Ly9jYXN0aW5nLnVkYWNpdHkuY2Fwc3RvbmUiLCJpYXQiOjE2MzI4MTg3NjUsImV4cCI6MTYzMjkwNTE2NSwiYXpwIjoibXM0VU16c1h1ZDZEYzZRYzFpaG1SaE5Td2JPc1k5UTUiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImFkZDphY3RvcnMiLCJhZGQ6bW92aWVzIiwiZGVsZXRlOmFjdG9ycyIsImRlbGV0ZTptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJ2aWV3OmFjdG9ycyIsInZpZXc6bW92aWVzIl19.UN4O8JLFYR4SgJLmAAmAstVyd1r4LBcDyNvxEwROwS3oCwUDysJn2zMEXu-Vl92AgTEFqLzW0ZQsmtDla4qrVTEvuG4zXcBs89wkxudOlSNsFAW8UKT1ZYMPJGvxrofTO84KU8SBDc4cThBOwhShvvCtWPGfFgAj5auf0KRuMqttREvlnV9IseMiTQg1hSPcm83bidOKi61sMNJaR36nFml4ycQpTr6gNPvyB6i0L8VuXAUJrl_6CRelBRBKlNpx83K9f2eqH5kKARYeC5K0hVFhuDxGoFV88E3vP3M_XuZVPhFTVnYwoD_dseokSSucmuexLw5wsTkglAj4aylZtA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api-url",
+			"value": "https://casting-agency-capstone-303.herokuapp.com"
+		}
+	]
+}
