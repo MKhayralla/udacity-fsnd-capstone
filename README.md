@@ -1,6 +1,6 @@
-#  Coffeshop Full Stack 
+#  Casting Agency Full Stack 
 
-The project is an educational project and the capstonr project of udacity full-stack nanodegree program .
+The project is an educational project and the capstone project of udacity full-stack nanodegree program .
 it is a demonstration of API development techniques using flask micro-framework and user authentication and authorization using OIDC and jwt and heroku deployment .
 most remarakable modules used are SQLAlchemy, flask-cors and jose .
 code style in the backend is [PEP8](https://www.python.org/dev/peps/pep-0008/)
@@ -392,7 +392,7 @@ Expected errors are 422,404,401,403,500,405
 after creating a heroku app, you can add its remote using this command
 
 ```bash
-heroku git:remote <you app remote>
+heroku git:remote <your app remote>
 ```
 
 Then you can commit and push changes using those commands
