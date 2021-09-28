@@ -210,7 +210,7 @@ def delete_actor(current_user, actor_id):
                 'success': True,
                 'status': 200,
                 'deleted_id': actor_id,
-                'modified_at': datetime.now()
+                'deleted_at': datetime.now()
             }
         )
     except:
@@ -230,6 +230,15 @@ def server_error(error):
         "error": 500,
         "message": "internal server error"
     }), 500
+
+# Method not allowed Error
+@app.errorhandler(405)
+def server_error(error):
+    return jsonify({
+        "success": False,
+        "error": 405,
+        "message": "Method Not Allowed!"
+    }), 405
 
 # unprocessible entity
 

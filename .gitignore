@@ -1,5 +1,4 @@
 /env
 __pycache__
-tokens.json
 *.env
-*.sh
+install.sh
