@@ -1,7 +1,13 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
-from config import basedir
+
 # database url
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@localhost:5432/casting'
+database_filename = "database.db"
+database_test_filename = "database_test.db"
+project_dir = os.path.dirname(os.path.abspath(__file__))
+SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+SQLALCHEMY_DATABASE_URI_TEST = "sqlite:///{}".format(os.path.join(project_dir, database_test_filename))
+
 
 # ORM instance
 db = SQLAlchemy()
@@ -16,10 +22,9 @@ setup_db(app)
 '''
 
 
-def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db):
+def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db, test=False):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    if db_path != SQLALCHEMY_DATABASE_URI:
-        app.config['SQLALCHEMY_DATABASE_URI'] = db_path
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_path if (test == False) else SQLALCHEMY_DATABASE_URI_TEST
     database.app = app
     database.init_app(app)
     database.create_all()

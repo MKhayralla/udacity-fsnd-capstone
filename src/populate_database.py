@@ -37,6 +37,6 @@ def insert_all():
 
 
 if __name__ == '__main__':
-    init_database(app)
+    init_database({'app' : app})
     insert_all()
     

@@ -16,11 +16,10 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.database_path = 'postgresql://postgres:password@localhost:5432/casting_test'
         self.app = app
         self.app.config["DEBUG"] = False
         self.client = self.app.test_client
-        setup_db(self.app, self.database_path)
+        setup_db(self.app, test=True)
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -217,7 +216,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         '''test adding new movie by producer'''
         new_movie = {
             'title' : 'face off',
-            'release_date' : datetime.strptime('01 01 1999', '%d %m %Y').date()
+            'release_date' : '01 01 1999'
         }
         res = self.client().post(
             '/movies',
@@ -263,9 +262,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         '''test editing existing movie by director'''
         movie_id = Movie.query.first().id
         new_data = {
-            'release_date' : datetime.strptime(
-                '01 01 2022', '%d %m %Y'
-            ),
+            'release_date' : '01 01 2022',
             'title' : 'Mafia reloaded'
         }
         res = self.client().patch(
@@ -290,9 +287,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     def test_patch_movie_404_by_producer(self):
         '''test editing non-existing movie by producer'''
         new_data = {
-            'release_date' : datetime.strptime(
-                '01 01 2022', '%d %m %Y'
-            ),
+            'release_date' : '01 01 2022',
             'title' : 'Mafia reloaded'
         }
         res = self.client().patch(

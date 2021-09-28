@@ -1,4 +1,5 @@
 from datetime import datetime
+from pprint import pprint
 import logging
 from flask import Flask, request, abort
 from flask.json import jsonify
@@ -51,6 +52,7 @@ def add_movie(current_user):
     '''
     data = request.json
     try:
+        data['release_date'] = datetime.strptime(data['release_date'], '%m %d %Y')
         movie = Movie(**data)
         movie.insert()
         return jsonify(
@@ -61,7 +63,8 @@ def add_movie(current_user):
                 'created_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
+        pprint(e)
         abort(422)
 
 
@@ -77,7 +80,10 @@ def edit_movie(current_user, movie_id):
         if 'title' in data:
             movie.title = data['title']
         if 'release_date' in data:
-            movie.release_date = data['release_date']
+            movie.release_date = datetime.strptime(
+                data['release_date'],
+                '%m %d %Y'
+            )
         movie.update()
         return jsonify(
             {
@@ -87,7 +93,8 @@ def edit_movie(current_user, movie_id):
                 'modified_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
+        pprint(e)
         abort(422)
 
 
@@ -225,7 +232,7 @@ def server_error(error):
 
 
 @app.errorhandler(422)
-def server_error(error):
+def unprocessible_error(error):
     return jsonify({
         "success": False,
         "error": 422,
@@ -259,7 +266,7 @@ def not_found(error):
 
 # Bad Request
 @app.errorhandler(400)
-def server_error(error):
+def bad_request_error(error):
     return jsonify({
         "success": False,
         "error": 400,
