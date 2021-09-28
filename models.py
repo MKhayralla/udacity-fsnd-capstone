@@ -35,6 +35,7 @@ def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db, test=False):
 
 '''
 Many to Many relationship association
+An association table between movies and actors
 '''
 
 

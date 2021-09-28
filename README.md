@@ -5,6 +5,12 @@ it is a demonstration of API development techniques using flask micro-framework 
 most remarakable modules used are SQLAlchemy, flask-cors and jose .
 code style in the backend is [PEP8](https://www.python.org/dev/peps/pep-0008/)
 
+## Motivation
+
+- help casting agencies standarize their job
+- demonstrate my ability in flask stack
+- aquire my nanodegree certificate
+
 
 ## Getting Started
 
