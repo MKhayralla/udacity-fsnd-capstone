@@ -4,6 +4,7 @@ import logging
 from flask import Flask, request, abort
 from flask.json import jsonify
 from flask_migrate import Migrate
+from flask_cors import CORS
 from models import setup_db, db, Actor, Movie
 from auth import AuthError, requires_auth
 
@@ -13,6 +14,8 @@ app = Flask(__name__)
 # config the app
 app.config.from_object('config')
 app.logger.setLevel(logging.INFO)
+#allow cors
+cors = CORS(app)
 # allow migration management using flask_migrate
 migrate = Migrate(app, db)
 # config database
