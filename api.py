@@ -15,7 +15,7 @@ app = Flask(__name__)
 # config the app
 app.config.from_object('config')
 app.logger.setLevel(logging.INFO)
-#allow cors
+# allow cors
 cors = CORS(app)
 # allow migration management using flask_migrate
 migrate = Migrate(app, db)
@@ -26,6 +26,7 @@ setup_db(app)
 '''
 Movies end points
 '''
+
 
 @requires_auth('view:movies')
 @app.route('/movies', methods=['GET'])
@@ -59,7 +60,8 @@ def add_movie(current_user):
     data = request.json
     try:
         # read date from input
-        data['release_date'] = datetime.strptime(data['release_date'], '%m %d %Y')
+        data['release_date'] = datetime.strptime(
+            data['release_date'], '%m %d %Y')
         # instantiate a movie from inputs
         movie = Movie(**data)
         # insert it into the database
@@ -114,7 +116,7 @@ def delete_movie(current_user, movie_id):
     '''
     deletes an existing movie movie
     '''
-    # get the required movie or 404 
+    # get the required movie or 404
     movie = Movie.query.get_or_404(movie_id)
     try:
         # delete the movie from the database
@@ -127,13 +129,14 @@ def delete_movie(current_user, movie_id):
                 'deleted_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
         abort(422)
 
 
 '''
 Actors end points
 '''
+
 
 @app.route('/actors', methods=['GET'])
 @requires_auth('view:actors')
@@ -177,7 +180,7 @@ def add_actor(current_user):
                 'created_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
         abort(422)
 
 
@@ -207,7 +210,7 @@ def edit_actor(current_user, actor_id):
                 'modified_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
         abort(422)
 
 
@@ -230,7 +233,7 @@ def delete_actor(current_user, actor_id):
                 'deleted_at': datetime.now()
             }
         )
-    except:
+    except Exception as e:
         abort(422)
 
 
@@ -249,6 +252,8 @@ def server_error(error):
     }), 500
 
 # Method not allowed Error
+
+
 @app.errorhandler(405)
 def server_error(error):
     return jsonify({
@@ -283,7 +288,6 @@ def authentication_error(error):
     }), error.status_code
 
 
-
 # Not Found
 @app.errorhandler(404)
 def not_found(error):
@@ -294,6 +298,8 @@ def not_found(error):
     }), 404
 
 # Bad Request
+
+
 @app.errorhandler(400)
 def bad_request_error(error):
     return jsonify({

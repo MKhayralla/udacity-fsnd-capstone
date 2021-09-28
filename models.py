@@ -5,8 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 database_filename = "database.db"
 database_test_filename = "database_test.db"
 project_dir = os.path.dirname(os.path.abspath(__file__))
-SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
-SQLALCHEMY_DATABASE_URI_TEST = "sqlite:///{}".format(os.path.join(project_dir, database_test_filename))
+SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(
+    os.path.join(project_dir, database_filename))
+SQLALCHEMY_DATABASE_URI_TEST = "sqlite:///{}".format(
+    os.path.join(project_dir, database_test_filename))
 
 
 # ORM instance
@@ -24,7 +26,8 @@ setup_db(app)
 
 def setup_db(app, db_path=SQLALCHEMY_DATABASE_URI, database=db, test=False):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_path if (test == False) else SQLALCHEMY_DATABASE_URI_TEST
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_path if (
+        not test) else SQLALCHEMY_DATABASE_URI_TEST
     database.app = app
     database.init_app(app)
     # database.create_all()
@@ -35,11 +38,12 @@ Many to Many relationship association
 '''
 
 
-
 assignments = db.Table(
     'assignments',
-    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True),
-    db.Column('actor_id', db.Integer, db.ForeignKey('actors.id'), primary_key=True)
+    db.Column('movie_id', db.Integer, db.ForeignKey(
+        'movies.id'), primary_key=True),
+    db.Column('actor_id', db.Integer, db.ForeignKey(
+        'actors.id'), primary_key=True)
 )
 
 
@@ -59,7 +63,7 @@ class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable = False, unique = True)
+    title = db.Column(db.String, nullable=False, unique=True)
     release_date = db.Column(db.Date)
     actors = db.relationship(
         'Actor',
@@ -88,14 +92,13 @@ class Movie(db.Model):
         '''
         self.actors.extend(actors)
         db.session.commit()
-        
 
     def format(self):
         return {
             'id': self.id,
             'title': self.title,
             'release_date': self.release_date,
-            'actors' : [actor.short() for actor in self.actors]
+            'actors': [actor.short() for actor in self.actors]
         }
 
     def short(self):
@@ -105,7 +108,7 @@ class Movie(db.Model):
         '''
         return {
             'id': self.id,
-            'title' : self.title
+            'title': self.title
         }
 
 
@@ -151,6 +154,6 @@ class Actor(db.Model):
 
     def short(self):
         return {
-            'id' : self.id,
-            'name' : self.name
+            'id': self.id,
+            'name': self.name
         }

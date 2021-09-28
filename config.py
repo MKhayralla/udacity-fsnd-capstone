@@ -5,5 +5,3 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Enable debug mode.
 DEBUG = True
-
-

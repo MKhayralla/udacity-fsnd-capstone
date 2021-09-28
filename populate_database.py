@@ -13,11 +13,14 @@ Mafia = Movie('Mafia', datetime.strptime('01 01 2000', '%d %m %Y').date())
 Helmy = Actor('Ahmed Helmy', 51, 'M')
 Ghada = Actor('Ghada Adel', 46, 'F')
 Reham = Actor('Reham 3bd el 8afour', 43, 'F')
-Mogrem = Movie('She turned me into a criminal', datetime.strptime('26 07 2006', '%d %m %Y').date())
+Mogrem = Movie('She turned me into a criminal',
+               datetime.strptime('26 07 2006', '%d %m %Y').date())
+
 
 def init_database(args):
     # setup the database
     setup_db(**args)
+
 
 def insert_all():
     '''
@@ -37,6 +40,5 @@ def insert_all():
 
 
 if __name__ == '__main__':
-    init_database({'app' : app})
+    init_database({'app': app})
     insert_all()
-    

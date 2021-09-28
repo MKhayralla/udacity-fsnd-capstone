@@ -26,7 +26,6 @@ class CastingAgencyTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-            
 
     def tearDown(self):
         """Executed after each test"""
@@ -35,12 +34,13 @@ class CastingAgencyTestCase(unittest.TestCase):
     """
     Actor Endpoints
     """
+
     def test_get_actors_correctly(self):
         '''test the successful actors result'''
         res = self.client().get(
             '/actors',
-            headers= {'Authorization' : 'Bearer {}'.format(tokens['assistant'])}
-            ) 
+            headers={'Authorization': 'Bearer {}'.format(tokens['assistant'])}
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -56,66 +56,65 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'No authorization header found')
 
-    
     def test_post_actor_success_by_director(self):
         '''test adding new actor by director'''
         new_actor = {
-            'name' : 'Mohamed Henedy',
-            'age' : 55,
-            'gender' : 'M'
+            'name': 'Mohamed Henedy',
+            'age': 55,
+            'gender': 'M'
         }
         res = self.client().post(
             '/actors',
-            json = new_actor,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            json=new_actor,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created'])
         self.assertTrue(data['created_at'])
-        
+
     def test_post_actor_fail_by_assistant(self):
         '''test adding new actor by assistant'''
         new_actor = {
-            'name' : 'Mohamed Henedy',
-            'age' : 55,
-            'gender' : 'M'
+            'name': 'Mohamed Henedy',
+            'age': 55,
+            'gender': 'M'
         }
         res = self.client().post(
             '/actors',
-            json = new_actor,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['assistant'])
+            json=new_actor,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['assistant'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['success'], False)
         self.assertEqual(
             data['message'],
             'you don\'t have enough permissions to perform this action'
-            )
+        )
 
     def test_patch_actor_success_by_director(self):
         '''test editing existing actor by director'''
         actor_id = Actor.query.first().id
         new_data = {
-            'name' : 'Some name',
-            'age' : 47
+            'name': 'Some name',
+            'age': 47
         }
         res = self.client().patch(
             '/actors/{}'.format(actor_id),
-            json = new_data,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            json=new_data,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -134,17 +133,17 @@ class CastingAgencyTestCase(unittest.TestCase):
     def test_patch_actor_404_by_director(self):
         '''test editing non-existing actor by director'''
         new_data = {
-            'name' : 'El Sakka',
-            'age' : 47
+            'name': 'El Sakka',
+            'age': 47
         }
         res = self.client().patch(
             '/actors/404',
-            json = new_data,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            json=new_data,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
@@ -152,16 +151,16 @@ class CastingAgencyTestCase(unittest.TestCase):
             'resource not found',
             data['message']
         )
-    
+
     def test_delete_actor_success_by_producer(self):
         '''test deleting existing actor by producer'''
         actor_id = Actor.query.first().id
         res = self.client().delete(
             '/actors/{}'.format(actor_id),
-            headers = {
-                'Authorization' : 'Bearer {}'.format(tokens['producer'])
+            headers={
+                'Authorization': 'Bearer {}'.format(tokens['producer'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -169,33 +168,34 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(
             actor_id,
             data['deleted_id']
-            )
-    
+        )
+
     def test_delete_actor_404_by_producer(self):
         '''test deleting non-existing actor by producer'''
         res = self.client().delete(
             '/actors/404',
-            headers = {
-                'Authorization' : 'Bearer {}'.format(tokens['producer'])
+            headers={
+                'Authorization': 'Bearer {}'.format(tokens['producer'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(
             'resource not found',
             data['message']
-            )
-    
+        )
+
     """
     Movie Endpoints
     """
+
     def test_get_movies_correctly(self):
         '''test the successful movies result'''
         res = self.client().get(
             '/movies',
-            headers= {'Authorization' : 'Bearer {}'.format(tokens['assistant'])}
-            ) 
+            headers={'Authorization': 'Bearer {}'.format(tokens['assistant'])}
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -211,68 +211,67 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'No authorization header found')
 
-    
     def test_post_movie_success_by_producer(self):
         '''test adding new movie by producer'''
         new_movie = {
-            'title' : 'face off',
-            'release_date' : '01 01 1999'
+            'title': 'face off',
+            'release_date': '01 01 1999'
         }
         res = self.client().post(
             '/movies',
-            json = new_movie,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['producer'])
+            json=new_movie,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['producer'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created'])
         self.assertTrue(data['created_at'])
         find_movie = Movie.query.filter_by(
-            title = 'face off'
-            ).one_or_none()
+            title='face off'
+        ).one_or_none()
         self.assertIsNotNone(find_movie)
-        
+
     def test_post_movie_fail_by_director(self):
         '''test adding new movie by director'''
         new_movie = {
-            'title' : 'face off',
-            'release_date' : datetime.strptime('01 01 1999', '%d %m %Y').date()
+            'title': 'face off',
+            'release_date': datetime.strptime('01 01 1999', '%d %m %Y').date()
         }
         res = self.client().post(
             '/movies',
-            json = new_movie,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            json=new_movie,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['success'], False)
         self.assertEqual(
             data['message'],
             'you don\'t have enough permissions to perform this action'
-            )
+        )
 
     def test_patch_movie_success_by_director(self):
         '''test editing existing movie by director'''
         movie_id = Movie.query.first().id
         new_data = {
-            'release_date' : '01 01 2022',
-            'title' : 'Mafia reloaded'
+            'release_date': '01 01 2022',
+            'title': 'Mafia reloaded'
         }
         res = self.client().patch(
             '/movies/{}'.format(movie_id),
-            json = new_data,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            json=new_data,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -287,17 +286,17 @@ class CastingAgencyTestCase(unittest.TestCase):
     def test_patch_movie_404_by_producer(self):
         '''test editing non-existing movie by producer'''
         new_data = {
-            'release_date' : '01 01 2022',
-            'title' : 'Mafia reloaded'
+            'release_date': '01 01 2022',
+            'title': 'Mafia reloaded'
         }
         res = self.client().patch(
             '/movies/404',
-            json = new_data,
-            headers = {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer {}'.format(tokens['producer'])
+            json=new_data,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens['producer'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
@@ -305,16 +304,16 @@ class CastingAgencyTestCase(unittest.TestCase):
             'resource not found',
             data['message']
         )
-    
+
     def test_delete_movie_success_by_producer(self):
         '''test deleting existing movie by producer'''
         movie_id = Movie.query.first().id
         res = self.client().delete(
             '/movies/{}'.format(movie_id),
-            headers = {
-                'Authorization' : 'Bearer {}'.format(tokens['producer'])
+            headers={
+                'Authorization': 'Bearer {}'.format(tokens['producer'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -322,24 +321,25 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(
             movie_id,
             data['deleted_id']
-            )
-    
+        )
+
     def test_delete_movie_403_by_director(self):
         '''test deleting existing movie failed by director'''
         movie_id = Movie.query.first().id
         res = self.client().delete(
             '/movies/{}'.format(movie_id),
-            headers = {
-                'Authorization' : 'Bearer {}'.format(tokens['director'])
+            headers={
+                'Authorization': 'Bearer {}'.format(tokens['director'])
             }
-            )
+        )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['success'], False)
         self.assertEqual(
             'you don\'t have enough permissions to perform this action',
             data['message']
-            )
+        )
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
